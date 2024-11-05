@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  nextjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app # Sinkronisasi kode antara host dan container
+    environment:
+      - NODE_ENV=development

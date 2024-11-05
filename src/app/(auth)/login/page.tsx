@@ -1,24 +1,45 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { signIn } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
-const LoginPage = () => {
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+const LoginPage = ({ searchParams }: { searchParams: any }) => {
+  const { push } = useRouter();
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const callbackUrl = searchParams.callbackUrl || "/";
+  const handleLogin = async (e: any) => {
     e.preventDefault();
-    fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: e.currentTarget.email.value,
-        password: e.currentTarget.password.value,
-      }),
-    });
+    setError("");
+    setIsLoading(true);
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: e.target.email.value,
+        password: e.target.password.value,
+        callbackUrl,
+      });
+      if (!res?.error) {
+        e.target.reset();
+        setIsLoading(false);
+        push(callbackUrl);
+      } else {
+        setIsLoading(false);
+        if (res.status === 401) {
+          setError("Email or Password is Incorrect");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-gray-800 flex-col">
+      {error && <div className="text-red-600 font-bold mb-3">{error}</div>}
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Welcome Back!
@@ -68,10 +89,11 @@ const LoginPage = () => {
           </div>
           <div>
             <button
+              disabled={isLoading}
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Sign In
+              {isLoading ? "Loading..." : "Login to your account"}
             </button>
           </div>
         </form>

@@ -1,0 +1,15 @@
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json dan install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy semua file ke dalam container
+COPY . .
+
+# Expose port dan start aplikasi dengan dev mode
+EXPOSE 3000
+CMD ["npm", "run", "dev"]

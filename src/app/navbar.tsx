@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
@@ -8,15 +10,16 @@ const Navbar = ({ disableNavbar }: { disableNavbar: string[] }) => {
   const pathname = usePathname();
   const router = useRouter();
 
+  const { data: session, status }: { data: any; status: string } = useSession();
+
   if (disableNavbar.includes(pathname)) {
-    return null; // Tidak menampilkan Navbar di halaman login dan register
+    return null;
   }
 
   return (
     <div className="w-full flex justify-between items-center bg-gray-800 p-4">
       <div className="text-white text-lg font-bold">My Website</div>
       <div className="flex space-x-4 items-center">
-        {/* Menu utama */}
         <div className="space-x-4">
           <Link
             href="/home"
@@ -59,19 +62,26 @@ const Navbar = ({ disableNavbar }: { disableNavbar: string[] }) => {
             Contact
           </Link>
         </div>
-
-        {/* Menu Login dan Register dengan jarak terpisah */}
       </div>
       <div>
-        <div className="ml-8 space-x-4">
-          <button
-            onClick={() => router.push("/login")}
-            className={`text-white hover:text-gray-300 ${
-              pathname === "/login" ? "font-bold" : ""
-            }`}
-          >
-            Login
-          </button>
+        <div className="ml-8 space-x-4 flex">
+          {status === "authenticated" ? (
+            <div className="flex">
+              <h4 className="text-white mr-5">{session?.user?.name}</h4>
+              <button className="text-white" onClick={() => signOut()}>
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => signIn()}
+              className={`text-white hover:text-gray-300 ${
+                pathname === "/login" ? "font-bold" : ""
+              }`}
+            >
+              Login
+            </button>
+          )}
           <button
             onClick={() => router.push("/register")}
             className={`text-white hover:text-gray-300 ${

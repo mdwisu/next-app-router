@@ -1,14 +1,45 @@
+"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 const RegisterPage = () => {
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { push } = useRouter();
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: e.target.name.value,
+        email: e.target.email.value,
+        password: e.target.password.value,
+      }),
+    });
+    if (res.status === 200) {
+      e.target.reset();
+      setIsLoading(false);
+      push("/login");
+    } else {
+      setError("User already exists");
+      setIsLoading(false);
+    }
+  };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-800">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-800">
+      {error && <div className="text-red-600 font-bold mb-3">{error}</div>}
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Create an Account
         </h2>
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
           <div>
             <label
               htmlFor="name"
@@ -57,7 +88,7 @@ const RegisterPage = () => {
               required
             />
           </div>
-          <div>
+          {/* <div>
             <label
               htmlFor="confirmPassword"
               className="block text-sm font-medium text-gray-700"
@@ -72,13 +103,14 @@ const RegisterPage = () => {
               placeholder="Confirm your password"
               required
             />
-          </div>
+          </div> */}
           <div>
             <button
+              disabled={isLoading}
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Register
+              {isLoading ? "Registering..." : "Register"}
             </button>
           </div>
         </form>
