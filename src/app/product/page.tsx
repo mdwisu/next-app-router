@@ -1,19 +1,32 @@
-import getData from "@/services/products";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import getData from "@/services/products";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import useSWR from "swr";
 
 // const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const fetcher = (url: any) => fetch(url).then((res) => res.json());
 
-const ProductPage = async () => {
+const ProductPage = () => {
   // props: { params: { slug: string } }
   // const { params } = props;
-  const data = await getData(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/product`
-  ).then(async (data) => {
-    // await delay(2000);
-    return data.data;
-  });
+
+  const { data, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/product`,
+    fetcher
+  );
+
+  // Menangani error
+  if (error) return <div>Failed to load</div>;
+  // Menangani loading state
+  if (!data) return <div>Loading...</div>;
+  // const data = await getData(
+  //   `${process.env.NEXT_PUBLIC_API_URL}/api/product`
+  // ).then(async (data) => {
+  //   // await delay(2000);
+  //   return data.data;
+  // });
   console.log(data);
   return (
     <div className="grid grid-cols-4 gap-4 mt-5 place-items-center">
