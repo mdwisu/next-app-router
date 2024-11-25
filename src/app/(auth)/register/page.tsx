@@ -18,7 +18,7 @@ const RegisterPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: e.target.name.value,
+        fullname: e.target.name.value,
         email: e.target.email.value,
         password: e.target.password.value,
       }),

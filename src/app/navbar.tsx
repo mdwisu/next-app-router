@@ -2,6 +2,7 @@
 "use client";
 
 import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
@@ -67,6 +68,14 @@ const Navbar = ({ disableNavbar }: { disableNavbar: string[] }) => {
         <div className="ml-8 space-x-4 flex">
           {status === "authenticated" ? (
             <div className="flex">
+              <Image
+                src="/images/profile.png"
+                alt="profile"
+                width={100}
+                height={100}
+                className="w-10 h-10 rounded-full"
+                priority
+              />
               <h4 className="text-white mr-5">{session?.user?.name}</h4>
               <button className="text-white" onClick={() => signOut()}>
                 Sign Out

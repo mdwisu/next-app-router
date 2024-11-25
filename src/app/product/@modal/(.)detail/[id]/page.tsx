@@ -1,19 +1,23 @@
-import Modal from "@/components/core/Modal";
 import getData from "@/services/products";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import React from "react";
 
+const Modal = dynamic(() => import("@/components/core/Modal"));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function DetailProductPage(props: any) {
   const { params } = props;
   const data = await getData(
-    "http://localhost:3000/api/product?id=" + params.id
+    `${process.env.NEXT_PUBLIC_API_URL}/api/product?id=${params.id}`
   ).then((data) => data.data);
   return (
     <Modal>
-      <img
+      <Image
         src={data.image}
-        alt=""
+        alt="product"
         className="w-full object-cover aspect-square col-span-2"
+        width={500}
+        height={500}
       />
       <div className="bg-white p-4 px-6">
         <h3>{data.title}</h3>

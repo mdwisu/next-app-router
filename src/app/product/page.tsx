@@ -1,4 +1,5 @@
 import getData from "@/services/products";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -7,12 +8,12 @@ import React from "react";
 const ProductPage = async () => {
   // props: { params: { slug: string } }
   // const { params } = props;
-  const data = await getData("http://localhost:3000/api/product").then(
-    async (data) => {
-      // await delay(2000);
-      return data.data;
-    }
-  );
+  const data = await getData(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/product`
+  ).then(async (data) => {
+    // await delay(2000);
+    return data.data;
+  });
   console.log(data);
   return (
     <div className="grid grid-cols-4 gap-4 mt-5 place-items-center">
@@ -25,10 +26,14 @@ const ProductPage = async () => {
             key={item.id}
             className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 my-2"
           >
-            <img
+            <Image
               className="p-8 rounded-t-lg object-cover h-96 w-full"
               src={item.image}
               alt="product image"
+              width={500}
+              height={500}
+              // loading="lazy"
+              priority
             />
             <div className="px-5 pb-5">
               <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white truncate">

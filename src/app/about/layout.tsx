@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-const LayoutAbout = ({
+const AboutLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -42,4 +42,4 @@ const LayoutAbout = ({
   );
 };
 
-export default LayoutAbout;
+export default AboutLayout;

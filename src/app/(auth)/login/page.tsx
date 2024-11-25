@@ -97,6 +97,16 @@ const LoginPage = ({ searchParams }: { searchParams: any }) => {
             </button>
           </div>
         </form>
+        <hr className="mt-6 border-t-2 border-gray-300" />
+        <button
+          type="button"
+          onClick={() =>
+            signIn("google", { callbackUrl: callbackUrl, redirect: false })
+          }
+          className="mt-6 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Login With Google
+        </button>
         <p className="mt-6 text-center text-sm text-gray-600">
           Don’t have an account?{" "}
           <Link
