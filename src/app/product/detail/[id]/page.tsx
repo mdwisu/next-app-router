@@ -19,6 +19,9 @@ export default function DetailProductPage(props: any) {
   if (error) return <div>Failed to load</div>;
   // Menangani loading state
   if (!data) return <div>Loading...</div>;
+
+  const products = data.data;
+
   // const data = await getData(
   //   `${process.env.NEXT_PUBLIC_API_URL}/api/product?id=${params.id}`
   // ).then((data) => data.data);
@@ -28,13 +31,13 @@ export default function DetailProductPage(props: any) {
         <Image
           width={500}
           height={500}
-          src={data.image}
+          src={products.image}
           alt=""
           className="w-full object-cover aspect-square col-span-2"
         />
         <div className="bg-white p-4 px-6">
-          <h3>{data.name}</h3>
-          <p>Price : $ {data.price}</p>
+          <h3>{products.name}</h3>
+          <p>Price : $ {products.price}</p>
         </div>
       </div>
     </div>

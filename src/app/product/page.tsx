@@ -23,19 +23,21 @@ const ProductPage = () => {
   if (error) return <div>Failed to load</div>;
   // Menangani loading state
   if (!data) return <div>Loading...</div>;
+  const products = data.data
   // const data = await getData(
   //   `${process.env.NEXT_PUBLIC_API_URL}/api/product`
   // ).then(async (data) => {
   //   // await delay(2000);
   //   return data.data;
   // });
-  console.log(data);
+
+  
   return (
     <div className="grid grid-cols-4 gap-4 mt-5 place-items-center">
       {/* <h1>{params.slug}</h1> */}
-      {data.length > 0 &&
+      {products.length > 0 &&
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data.map((item: any) => (
+        products.map((item: any) => (
           <Link
             href={`/product/detail/${item.id}`}
             key={item.id}
